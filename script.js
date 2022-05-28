@@ -36,7 +36,8 @@ function counter() {
     }
     let sum = rockCounter + paperCounter + scissorsCounter;
     
-    console.log("Rocks: " + rockCounter + ` (${rockCounter/sum*100} %)`
+    console.log("Results of computerPlay() after n = " + i + " trials: \n"
+     + "\nRocks: " + rockCounter + ` (${rockCounter/sum*100} %)`
      + "\nPapers: " + paperCounter + ` (${paperCounter/sum*100} %)`
      + "\nScissors: " + scissorsCounter + ` (${scissorsCounter/sum*100} %)`);
 }

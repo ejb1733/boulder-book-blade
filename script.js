@@ -10,6 +10,11 @@ const WIN_CONDITIONS = [`${ROCK}v${SCISSORS}`, `${PAPER}v${ROCK}`, `${SCISSORS}v
 
 const options = [ROCK, PAPER, SCISSORS];
 
+var continuePlaying = true;
+
+// const button = document.querySelector('#rock');
+// button.addEventListener('click', updateButton);
+
 function computerPlay() {
     let random = Math.floor(Math.random() * 3);
     return options[random];
@@ -44,16 +49,54 @@ function counter() {
 
 // EFFECTS: plays the user's selection against the computer's selection,
 //          returns the result of the round
-function play(userSelection, computerSelection) {
+function playRound(userSelection, computerSelection) {
     let currCombo = `${userSelection}v${computerSelection}`;
     if (userSelection == computerSelection) {
+        console.log("T");
         return TIE;
     } else if (WIN_CONDITIONS.includes(currCombo)) {
+        console.log("W");
         return USER_WIN;
     } else {
+        console.log("L");
         return USER_LOSE;
     }
 }
 
+function updateButton() {
+    switch (true) {
+        case (button.value == ROCK):
+            playRound(ROCK, computerPlay);
+            break;
+        case (button.value == PAPER):
+            playRound(PAPER, computerPlay);
+            break;
+        case (button.value == SCISSORS):
+            playRound(PAPER, computerPlay);
+            break;
+    }
+}
+
+function game() {
+    let user_wins = 0;
+    let computer_wins = 0;
+    while (continuePlaying) {
+        let userSelection = prompt("What's it gunna be, punk?");
+        let result = playRound(userSelection, computerPlay());
+        if (result == USER_WIN) {
+            user_wins++;
+            console.log(`You've won ${user_wins} rounds!`);
+        } else if (result == USER_LOSE) {
+            computer_wins++;
+            console.log(`You've lost ${computer_wins} rounds!`);
+        }
+        if (user_wins == 5 || computer_wins == 5) {
+            continuePlaying = false;
+        }
+    }
+}
+
+game();
+
 counter();
-console.log(play(ROCK, computerPlay()));
+console.log(playRound(ROCK, computerPlay()));

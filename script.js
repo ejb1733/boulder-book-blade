@@ -2,9 +2,9 @@ const ROCK = "rock";
 const PAPER = "paper";
 const SCISSORS = "scissors";
 
-const TIE = "tie";
-const USER_WIN = "win";
-const USER_LOSE = "lose";
+const TIE = "TIED";
+const USER_WIN = "WON";
+const USER_LOSE = "LOST";
 
 const WIN_CONDITIONS = [`${ROCK}v${SCISSORS}`, `${PAPER}v${ROCK}`, `${SCISSORS}v${PAPER}`]
 
@@ -50,17 +50,17 @@ function counter() {
 // EFFECTS: plays the user's selection against the computer's selection,
 //          returns the result of the round
 function playRound(userSelection, computerSelection) {
+    let result = null;
     let currCombo = `${userSelection}v${computerSelection}`;
     if (userSelection == computerSelection) {
-        console.log("T");
-        return TIE;
+        result = TIE;
     } else if (WIN_CONDITIONS.includes(currCombo)) {
-        console.log("W");
-        return USER_WIN;
+        result = USER_WIN;
     } else {
-        console.log("L");
-        return USER_LOSE;
+        result = USER_LOSE;
     }
+    console.log(`Your ${userSelection} ${result} versus ${computerSelection}!`);
+    return result;
 }
 
 function updateButton() {
@@ -81,7 +81,7 @@ function game() {
     let user_wins = 0;
     let computer_wins = 0;
     while (continuePlaying) {
-        let userSelection = prompt("What's it gunna be, punk?");
+        let userSelection = prompt("What's it gonna be, punk?");
         let result = playRound(userSelection, computerPlay());
         if (result == USER_WIN) {
             user_wins++;

@@ -13,6 +13,7 @@ const options = [ROCK, PAPER, SCISSORS];
 var continuePlaying = true;
 
 const results = document.querySelector('.results');
+const buttondiv = document.querySelector('.buttons');
 const body = document.querySelector('body');
 
 let wins = 0;
@@ -21,6 +22,8 @@ let losses = 0;
 let rockbtn = document.querySelector('#rock');
 let paperbtn = document.querySelector('#paper');
 let scissorsbtn = document.querySelector('#scissors');
+
+let resbtn = document.querySelector('#resbtn');
 
 results.innerText = `
 
@@ -77,24 +80,30 @@ function playRound(userSelection, computerSelection) {
 
     WINS: ${wins} 
     LOSSES: ${losses}`;
-    checkGameState();
+    game();
     console.log(`Your ${userSelection} ${result} versus ${computerSelection}!`);
     return result;
 }
 
-var checkGameState = () => {
+// var isGameOver = () => {
+//     return (wins == 5 || losses == 5);
+// }
+
+var game = () => {
     if (wins == 5 || losses == 5) {
 
         btn = document.createElement('button');
-        btn.innerHTML = 'click to restart';
         for (let i = 0; i < gbArray.length; i++) {
             gbArray[i].remove();
         }
         btn.addEventListener('click', () => {
             resetGame();
             btn.remove();
-            body.prepend(rockbtn, paperbtn, scissorsbtn);
+            resbtn.style.display == 'none';
         })
+        btn.className = 'restartbtn';
+        btn.innerHTML = 'click to restart';
+        // resbtn.style.display = 'block';
         body.appendChild(btn);
     }
 }
@@ -107,13 +116,42 @@ var resetGame = function() {
 
 WINS: ${wins} 
 LOSSES: ${losses}`;
+buttondiv.prepend(rockbtn, paperbtn, scissorsbtn);
 }
 
 let gbArray = Array.from(document.querySelectorAll('.gb'));
 for (let i = 0; i < 3; i++) {
     gbArray[i].addEventListener('click', () => {
         playRound(gbArray[i].id, computerPlay());
+        // displayBtns();
+        // if (!isGameOver()) {
+        // hideBtn(gbArray[i]);
+        // }
     })
 }
+
+// function myFunction() {
+//     console.log(resbtn);
+//     if (resbtn.style.display == 'none') {
+//         resbtn.style.display = 'block';
+//     } else {
+//         resbtn.style.display = 'none';
+//     }
+// }
+
+// let displayBtns = () => {
+//     for (let i = 0; i < gbArray.length; i++) {
+//         gbArray[i].style.display = 'block';
+//     }
+// }
+
+// let hideBtn = function(btn) {
+//     btn.removeEventListener('click', (e));
+//     let ogBorderColor = btn.style.borderColor;
+//     console.log(ogBorderColor);
+//     btn.style.backgroundColor = 'white';
+//     btn.style.borderColor = 'white';
+//     btn.style.color = 'white';
+// }
 
 counter();

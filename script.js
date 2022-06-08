@@ -10,22 +10,19 @@ const WIN_CONDITIONS = [`${ROCK}v${SCISSORS}`, `${PAPER}v${ROCK}`, `${SCISSORS}v
 
 const options = [ROCK, PAPER, SCISSORS];
 
-var continuePlaying = true;
-
 const results = document.querySelector('.results');
 const buttondiv = document.querySelector('.buttons');
 const body = document.querySelector('body');
 
 let wins = 0;
 let losses = 0;
+let finalResult = '';
 
 let rockbtn = document.querySelector('#rock');
 let paperbtn = document.querySelector('#paper');
 let scissorsbtn = document.querySelector('#scissors');
 
-let resbtn = document.querySelector('#resbtn');
-
-results.innerText = `
+results.innerText = `Choose your move... carefully!
 
 WINS: ${wins} 
 LOSSES: ${losses}`;
@@ -35,12 +32,12 @@ function computerPlay() {
     return options[random];
 }
 
-// EFFECTS: logs the number of rocks, papers, and scissors
-//          selected by the computer after i trials
+// EFFECTS: log number of rock, paper, and scissor
+//          selected by computer after n trials
 function counter() {
     let rockCounter, paperCounter, scissorsCounter;
     rockCounter = paperCounter = scissorsCounter = 0;
-    for (var i = 0; i < 600; i++) {
+    for (var n = 0; n < 600; n++) {
         let ans = computerPlay();
         switch (true) {
             case (ans == ROCK):
@@ -56,7 +53,7 @@ function counter() {
     }
     let sum = rockCounter + paperCounter + scissorsCounter;
     
-    console.log("Results of computerPlay() after n = " + i + " trials: \n"
+    console.log("Results of computerPlay() after n = " + n + " trials: \n"
      + "\nRocks: " + rockCounter + ` (${rockCounter/sum*100} %)`
      + "\nPapers: " + paperCounter + ` (${paperCounter/sum*100} %)`
      + "\nScissors: " + scissorsCounter + ` (${scissorsCounter/sum*100} %)`);
@@ -80,78 +77,64 @@ function playRound(userSelection, computerSelection) {
 
     WINS: ${wins} 
     LOSSES: ${losses}`;
-    game();
-    console.log(`Your ${userSelection} ${result} versus ${computerSelection}!`);
+    isGameOver();
     return result;
 }
 
-// var isGameOver = () => {
-//     return (wins == 5 || losses == 5);
-// }
-
-var game = () => {
+// EFFECTS: check if game over, if so, set appropriate text for winner
+var isGameOver = () => {
     if (wins == 5 || losses == 5) {
-
-        btn = document.createElement('button');
-        for (let i = 0; i < gbArray.length; i++) {
-            gbArray[i].remove();
+        let resultDiv = document.createElement('p');
+        resultDiv.setAttribute('id', 'result');
+        if (wins > losses) {
+            finalResult = 'You beat the computer - nice work!';
+            resultDiv.setAttribute('style', 'color:cadetblue');
+        } else {
+            finalResult = 'The computer won - oh no!';
+            resultDiv.setAttribute('style', 'color:crimson');
         }
-        btn.addEventListener('click', () => {
-            resetGame();
-            btn.remove();
-            resbtn.style.display == 'none';
-        })
-        btn.className = 'restartbtn';
-        btn.innerHTML = 'click to restart';
-        // resbtn.style.display = 'block';
-        body.appendChild(btn);
+        resultDiv.innerText = finalResult;
+        
+        gameOver(resultDiv);
     }
 }
 
+// EFFECTS: set page to game over state & display winning text
+var gameOver = function(resultDiv) {
+    btn = document.createElement('button');
+    for (let i = 0; i < gbArray.length; i++) {
+        gbArray[i].remove();
+    }
+    btn.addEventListener('click', () => {
+        resetGame();
+        btn.remove();
+    })
+    btn.className = 'restartbtn';
+    btn.innerHTML = 'click to restart';
+    body.appendChild(btn);
+    buttondiv.prepend(resultDiv);
+}
+
+// EFFECTS: resets game to default state
 var resetGame = function() {
     wins = 0;
     losses = 0;
     console.log('reset');
-    results.innerText = `
+    results.innerText = `Choose your move... carefully!
 
 WINS: ${wins} 
 LOSSES: ${losses}`;
 buttondiv.prepend(rockbtn, paperbtn, scissorsbtn);
+finalResult = '';
+let toRemove = document.querySelector('#result');
+toRemove.remove();
 }
 
 let gbArray = Array.from(document.querySelectorAll('.gb'));
 for (let i = 0; i < 3; i++) {
     gbArray[i].addEventListener('click', () => {
         playRound(gbArray[i].id, computerPlay());
-        // displayBtns();
-        // if (!isGameOver()) {
-        // hideBtn(gbArray[i]);
-        // }
     })
 }
-
-// function myFunction() {
-//     console.log(resbtn);
-//     if (resbtn.style.display == 'none') {
-//         resbtn.style.display = 'block';
-//     } else {
-//         resbtn.style.display = 'none';
-//     }
-// }
-
-// let displayBtns = () => {
-//     for (let i = 0; i < gbArray.length; i++) {
-//         gbArray[i].style.display = 'block';
-//     }
-// }
-
-// let hideBtn = function(btn) {
-//     btn.removeEventListener('click', (e));
-//     let ogBorderColor = btn.style.borderColor;
-//     console.log(ogBorderColor);
-//     btn.style.backgroundColor = 'white';
-//     btn.style.borderColor = 'white';
-//     btn.style.color = 'white';
-// }
 
 counter();

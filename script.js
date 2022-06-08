@@ -13,6 +13,7 @@ const options = [ROCK, PAPER, SCISSORS];
 const results = document.querySelector('.results');
 const buttondiv = document.querySelector('.buttons');
 const body = document.querySelector('body');
+const footer = document.querySelector('.footer');
 
 let wins = 0;
 let losses = 0;
@@ -85,38 +86,41 @@ function playRound(userSelection, computerSelection) {
 var isGameOver = () => {
     if (wins == 5 || losses == 5) {
         let resultDiv = document.createElement('p');
+        let victoryGif = document.createElement('img');
         resultDiv.setAttribute('id', 'result');
         if (wins > losses) {
             finalResult = 'You beat the computer - nice work!';
             resultDiv.setAttribute('style', 'color:cadetblue');
+            victoryGif.setAttribute('src', './gifs/giphy.gif');
         } else {
             finalResult = 'The computer won - oh no!';
             resultDiv.setAttribute('style', 'color:crimson');
         }
         resultDiv.innerText = finalResult;
         
-        gameOver(resultDiv);
+        gameOver(resultDiv, victoryGif);
     }
 }
 
 // EFFECTS: set page to game over state & display winning text
-var gameOver = function(resultDiv) {
+var gameOver = function(resultDiv, gif) {
     btn = document.createElement('button');
     for (let i = 0; i < gbArray.length; i++) {
         gbArray[i].remove();
     }
     btn.addEventListener('click', () => {
-        resetGame();
+        resetGame(gif);
         btn.remove();
     })
     btn.className = 'restartbtn';
     btn.innerHTML = 'click to restart';
-    body.appendChild(btn);
+    footer.appendChild(btn);
     buttondiv.prepend(resultDiv);
+    footer.append(gif);
 }
 
 // EFFECTS: resets game to default state
-var resetGame = function() {
+var resetGame = function(gif) {
     wins = 0;
     losses = 0;
     console.log('reset');
@@ -128,6 +132,7 @@ buttondiv.prepend(rockbtn, paperbtn, scissorsbtn);
 finalResult = '';
 let toRemove = document.querySelector('#result');
 toRemove.remove();
+gif.remove();
 }
 
 let gbArray = Array.from(document.querySelectorAll('.gb'));
